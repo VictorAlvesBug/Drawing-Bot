@@ -173,7 +173,6 @@ function setup() {
     }
 
     botoes.push(new Botao(10, height - 30, GERAR_GCODE));
-
     botoes.push(new Botao(width - 175, 1, HISTORICO));
 
     btnGcode = createButton('DRAW GCODE');

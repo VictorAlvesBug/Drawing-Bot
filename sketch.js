@@ -122,10 +122,8 @@ $(window).on('resize', function () {
 
     txtGcode.position(width - 172, value - 30);
     btnGcode.style(`width: 188px;`);
-    txtGcode.style(`height: ${height - 55 - value}px;`);
-
-    btnGcode.style(`display: none;`);//
-
+    txtGcode.style(`height: ${height - 25 - value}px;`);
+    
     for (var i = 0; i < formas.length; i++) {
         for (var c = 0; c < formas[i].clique.length; c++) {
             formas[i].clique[c].x = map(formas[i].clique[c].x, areaDesenhavelX_Anterior, areaDesenhavelX_Anterior + areaDesenhavelWidth_Anterior, areaDesenhavelX, areaDesenhavelX + areaDesenhavelWidth);
@@ -182,12 +180,13 @@ function setup() {
     botoes.push(new Botao(10, height - 30, GERAR_GCODE));
     botoes.push(new Botao(width - 175, 1, HISTORICO));
 
-    btnGcode = createButton('DESENHAR');
+    btnGcode = createButton('GERAR GCODE');
     btnGcode.mousePressed(function () {
-        if (txtGcode.value() != "") {
+        /*if (txtGcode.value() != "") {
             stopLoop = true;
             desenharGcode(txtGcode.value());
-        }
+        }*/
+        abrirModalConfiguracoes();
     });
     btnGcode.position(width - 172, height - 30);
     btnGcode.style("border: 2px solid #E91C5D;" +
@@ -201,9 +200,7 @@ function setup() {
         "text-transform: uppercase;" +
         "-webkit-transition: background .4s, border-color .4s, color .4s;" +
         "transition: background .4s, border-color .4s, color .4s;");
-
-    btnGcode.style(`display: none;`);//
-
+    
     txtGcode = createElement('textarea');
     txtGcode.id('txtGcode');
     let value = 40;
@@ -217,7 +214,7 @@ function setup() {
         "display: inline-block;" +
         "overflow-y: scroll;" +
         "width: 182px;" +
-        `height: ${height - 55 - value}px;` +
+        `height: ${height - 25 - value}px;` +
         "resize: none;" +
         "font-weight: bold;" +
         "text-transform: uppercase;" +

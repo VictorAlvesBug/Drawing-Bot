@@ -3,7 +3,7 @@ var enviandoDados = false;
 
 function gerarGcode(escala, velocidadeRobo/*, segmentosElipse*/) {
     var strGcode = `G0 \n`;
-    var strGcode = `G1 F${velocidadeRobo} \n`;
+    strGcode += `G1 F${velocidadeRobo} \n`;
     for (var i = 0; i < formas.length; i++) {
         var arrayPontos = formas[i].getPontos();
         let x = ceil(map(arrayPontos[0].x - areaDesenhavelX, 0, areaDesenhavelWidth, 0, escala));

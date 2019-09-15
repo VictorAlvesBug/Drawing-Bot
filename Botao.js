@@ -59,7 +59,7 @@ class Botao {
             ///
         }
         else if (this.modo == GERAR_GCODE) {
-            abrirModalConfiguracoes();
+            //abrirModalConfiguracoes();
         }
         else {
             clicks = [];
@@ -213,12 +213,14 @@ function desenharBarraDeBotoes() {
         var larguraBotao;
         var alturaBotao;
 
+        if (botoes[i].modo != GERAR_GCODE) {
         if (myMouseX > botoes[i].x && myMouseX < botoes[i].x + botoes[i].largura &&
             myMouseY > botoes[i].y && myMouseY < botoes[i].y + botoes[i].altura) {
             botoes[i].hover();
         }
         else {
             botoes[i].noHover();
+        }
         }
     }
 }

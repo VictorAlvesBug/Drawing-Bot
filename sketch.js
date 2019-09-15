@@ -104,7 +104,10 @@ const fiap = {
     'I': [[0.295, 0], [0.295, 1]],
     'A1': [[0.36, 0], [0.524, 1], [0.615, 0.446]],
     'A2': [[0.647, 0.262], [0.688, 0]],
-    'P': [[0.752, 0], [0.752, 1], [0.834, 1], [0.919, 1], [0.95, 0.977], [0.976, 0.912], [0.994, 0.815], [1, 0.7], [0.994, 0.585], [0.976, 0.488], [0.95, 0.423], [0.919, 0.4], [0.834, 0.4]]
+ /*   'P': [[0.752, 0], [0.752, 1], [0.834, 1], [0.919, 1], [0.95, 0.977], [0.976, 0.912], [0.994, 0.815], [1, 0.7], [0.994, 0.585], [0.976, 0.488], [0.95, 0.423], [0.919, 0.4], [0.834, 0.4]]
+*/
+    'P': [[0.752, 0], [0.752, 1], [0.834, 1], [0.918, 1], [0.934, 0.994], [0.949, 0.977], [0.963, 0.949], [0.976, 0.912], [0.986, 0.866], [0.993, 0.814], [0.998, 0.758], [1, 0.700], [0.998, 0.641], [0.993, 0.585], [0.986, 0.533], [0.976, 0.487], [0.963, 0.450], [0.949, 0.422], [0.934, 0.405], [0.918, 0.4], [0.834, 0.4]]
+
 };
 
 $(window).on('resize', function () {
@@ -115,8 +118,8 @@ $(window).on('resize', function () {
 
     botoes[9].y = height - 30;
     botoes[10].x = width - 175;
-    btnGcode.position(width -172, height - 30);
-    txtGcode.position(width  -172, 50);
+    btnGcode.position(width - 172, height - 30);
+    txtGcode.position(width - 172, 50);
     btnGcode.style(`width: 188px;`);
     txtGcode.style(`height: ${height - 100}px;`);
 
@@ -228,12 +231,12 @@ function draw() {
         delayTeclado();
         pointerCont++;
 
-            if (mostrarHistorico) {
-                desenharHistorico();
-            }
-            else {
-                desenharFormas();
-            }
+        if (mostrarHistorico) {
+            desenharHistorico();
+        }
+        else {
+            desenharFormas();
+        }
 
         if (mouseX > areaDesenhavelX && mouseX < areaDesenhavelX + areaDesenhavelWidth && mouseY > areaDesenhavelY && mouseY < areaDesenhavelY + areaDesenhavelHeight) {
             noCursor();
@@ -319,7 +322,7 @@ function removerPontosDesnecessarios(pontos) {
 function desenharGrid() {
     strokeWeight(1);
     var corGridPrincipal = color(192);
-    var corGridSecundario = color(192,60);
+    var corGridSecundario = color(192, 60);
     var par = false;
     for (var x = areaDesenhavelX; x < areaDesenhavelX + areaDesenhavelWidth; x += areaDesenhavelWidth / 40) {
         if (par) {
@@ -350,10 +353,10 @@ function desenharBordaCanvas() {
     stroke(0);
     strokeWeight(2);
 
-    var menorLado = min(width - 262, height+11);
+    var menorLado = min(width - 262, height + 11);
 
     areaDesenhavelX = 80 + (width - 262 - menorLado) / 2;
-    areaDesenhavelY = 6+(height - menorLado) / 2;
+    areaDesenhavelY = 6 + (height - menorLado) / 2;
     areaDesenhavelWidth = menorLado - 12;
     areaDesenhavelHeight = menorLado - 12;
 

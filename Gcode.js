@@ -14,7 +14,7 @@ function gerarGcode() {
             x = int(arrayPontos[j].x) - areaDesenhavelX;
             y = int(arrayPontos[j].y) - areaDesenhavelY;
 
-            if (x == 0 && y == 0) {
+            if (x == -areaDesenhavelX && y == -areaDesenhavelY) {
                 strGcode += 'G1 Z1 \n';
             }
             else {
@@ -49,52 +49,6 @@ function enviarDados() {
         enviarLinha(linha);
     }
 }
-
-//////////////////////////////////////////////////////////////////////
-
-//var SerialPort = require("serialport").SerialPort
-//var serialPort = new SerialPort('COM1',
-//    {
-//        baudrate: 57600
-//    });
-
-//serialPort.on("open", function () {
-
-//    console.log('open');
-
-
-//    if (enviandoDados) {
-
-//        var listaComandos = txtGcode.val().split('\n');
-
-//        for (let i = 0; i < listaComandos.length; i++) {
-//            let linha = listaComandos[i];
-
-//            setTimeout(function () {
-//                serialPort.write(linha + "V" + linha.length, function (err, results) {
-//                    console.log('err ' + err);
-//                    console.log('results ' + results);
-//                });
-
-//                setTimeout(function () {
-//                    serialPort.write("...from Node.js", function (err, results) {
-//                        console.log('err ' + err);
-//                        console.log('results ' + results);
-//                    });
-//                }, 1000);
-
-//            }, 3000);
-
-//        }
-
-
-//    }
-
-//});
-
-//////////////////////////////////////////////////////////////////////
-
-
 
 function enviarLinha(linha) {
 

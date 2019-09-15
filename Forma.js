@@ -29,11 +29,14 @@ class Forma {
                 raioX = (this.clique[1].x - this.clique[0].x);
                 raioY = (this.clique[1].y - this.clique[0].y);
 
-                for (var angulo = 0; angulo < TWO_PI + TWO_PI / 32; angulo += TWO_PI / 32) {
+                var numeroSegmentos = 64;
+
+                for (var angulo = 0; angulo < TWO_PI + TWO_PI / numeroSegmentos; angulo += TWO_PI / numeroSegmentos) {
                     let x = centroX + raioX * cos(angulo);
                     let y = centroY + raioY * sin(angulo);
                     auxPontos.push(createVector(x, y));
                 }
+
                 return auxPontos;
                 break;
             case STAR:

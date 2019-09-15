@@ -18,8 +18,6 @@ var lastResize = 60;
 
 var botoes;
 
-var mostrarHistorico = false;
-
 var btnGcode;
 var txtGcode;
 
@@ -104,8 +102,6 @@ const fiap = {
     'I': [[0.295, 0], [0.295, 1]],
     'A1': [[0.36, 0], [0.524, 1], [0.615, 0.446]],
     'A2': [[0.647, 0.262], [0.688, 0]],
- /*   'P': [[0.752, 0], [0.752, 1], [0.834, 1], [0.919, 1], [0.95, 0.977], [0.976, 0.912], [0.994, 0.815], [1, 0.7], [0.994, 0.585], [0.976, 0.488], [0.95, 0.423], [0.919, 0.4], [0.834, 0.4]]
-*/
     'P': [[0.752, 0], [0.752, 1], [0.834, 1], [0.918, 1], [0.934, 0.994], [0.949, 0.977], [0.963, 0.949], [0.976, 0.912], [0.986, 0.866], [0.993, 0.814], [0.998, 0.758], [1, 0.700], [0.998, 0.641], [0.993, 0.585], [0.986, 0.533], [0.976, 0.487], [0.963, 0.450], [0.949, 0.422], [0.934, 0.405], [0.918, 0.4], [0.834, 0.4]]
 
 };
@@ -113,16 +109,22 @@ const fiap = {
 $(window).on('resize', function () {
     resizing = true;
     lastResize = 0;
-    resizeCanvas(window.innerWidth - /*1*/26, window.innerHeight - 20);
+    resizeCanvas(window.innerWidth - 26, window.innerHeight - 20);
     desenharBordaCanvas();
 
     botoes[9].y = height - 30;
     botoes[10].x = width - 175;
     btnGcode.position(width - 172, height - 30);
-    txtGcode.position(width - 172, 50);
-    btnGcode.style(`width: 188px;`);
-    txtGcode.style(`height: ${height - 100}px;`);
+    let value = 40;
+    while (value < (height - 55) / 2) {
+        value += 60;
+    }
 
+    txtGcode.position(width - 172, value - 30);
+    btnGcode.style(`width: 188px;`);
+    txtGcode.style(`height: ${height - 55 - value}px;`);
+
+    btnGcode.style(`display: none;`);//
 
     for (var i = 0; i < formas.length; i++) {
         for (var c = 0; c < formas[i].clique.length; c++) {
@@ -149,10 +151,12 @@ $(window).on('resize', function () {
         tempForma.clique[0].y = map(tempForma.clique[0].y, areaDesenhavelY_Anterior, areaDesenhavelY_Anterior + areaDesenhavelHeight_Anterior, areaDesenhavelY, areaDesenhavelY + areaDesenhavelHeight);
     }
 
-    desenharFormas();
+    desenharGrid();
     desenharBarraDeBotoes();
     delayTeclado();
     pointerCont++;
+    desenharHistorico();
+    desenharFormas();
 
     areaDesenhavelX_Anterior = areaDesenhavelX;
     areaDesenhavelY_Anterior = areaDesenhavelY;
@@ -161,7 +165,7 @@ $(window).on('resize', function () {
 });
 
 function setup() {
-    var canvas = createCanvas(window.innerWidth - /*1*/26, window.innerHeight - 20);
+    var canvas = createCanvas(window.innerWidth - 26, window.innerHeight - 20);
     canvas.position(10, 10);
     clicks = [];
     tempForma = undefined;
@@ -178,7 +182,7 @@ function setup() {
     botoes.push(new Botao(10, height - 30, GERAR_GCODE));
     botoes.push(new Botao(width - 175, 1, HISTORICO));
 
-    btnGcode = createButton('DRAW GCODE');
+    btnGcode = createButton('DESENHAR');
     btnGcode.mousePressed(function () {
         if (txtGcode.value() != "") {
             stopLoop = true;
@@ -198,15 +202,22 @@ function setup() {
         "-webkit-transition: background .4s, border-color .4s, color .4s;" +
         "transition: background .4s, border-color .4s, color .4s;");
 
+    btnGcode.style(`display: none;`);//
+
     txtGcode = createElement('textarea');
     txtGcode.id('txtGcode');
-    txtGcode.position(width - 172, 50);
+    let value = 40;
+    while (value < (height - 55) / 2) {
+        value += 60;
+    }
+
+    txtGcode.position(width - 172, value - 30);
     txtGcode.style("border: 1px solid #E91C5D;" +
         "cursor: pointer;" +
         "display: inline-block;" +
         "overflow-y: scroll;" +
         "width: 182px;" +
-        `height: ${height - 100}px;` +
+        `height: ${height - 55 - value}px;` +
         "resize: none;" +
         "font-weight: bold;" +
         "text-transform: uppercase;" +
@@ -231,12 +242,8 @@ function draw() {
         delayTeclado();
         pointerCont++;
 
-        if (mostrarHistorico) {
-            desenharHistorico();
-        }
-        else {
-            desenharFormas();
-        }
+        desenharHistorico();
+        desenharFormas();
 
         if (mouseX > areaDesenhavelX && mouseX < areaDesenhavelX + areaDesenhavelWidth && mouseY > areaDesenhavelY && mouseY < areaDesenhavelY + areaDesenhavelHeight) {
             noCursor();

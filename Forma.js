@@ -122,7 +122,6 @@ class Forma {
 
     draw(temp = false, cor = '#ed145b') {
         noFill();
-        //stroke(0);
         stroke(cor);
         strokeWeight(2);
 
@@ -258,7 +257,6 @@ class Forma {
 
     desenharMiniatura(offsetX, offsetY, tamanhoMiniatura) {
         noFill();
-        //stroke(0);
         stroke('#ed145b');
         strokeWeight(1);
 

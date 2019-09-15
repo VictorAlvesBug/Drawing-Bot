@@ -26,16 +26,8 @@ class Botao {
         cursor(HAND);
         this.estado = HOVER;
         this.draw();
-        if (this.modo == HISTORICO) {
-            $("#txtGcode").hide();
-            mostrarHistorico = true;
-            this.hoverAnimacao = 1;
-            //historicoPagina = 1;
-        }
-        else {
         if (this.hoverAnimacao < 1) {
             this.hoverAnimacao += 0.1;
-        }
         }
     }
 
@@ -47,7 +39,6 @@ class Botao {
             this.estado = CLICKED;
             strokeWeight(1);
             this.hoverAnimacao = 1;
-            //var corNoHover = color('#ed145b');
             stroke('#ed145b');
         }
         else {
@@ -68,9 +59,7 @@ class Botao {
             ///
         }
         else if (this.modo == GERAR_GCODE) {
-            clicks = [];
-            tempPontos = [];
-            gerarGcode();
+            abrirModalConfiguracoes();
         }
         else {
             clicks = [];
@@ -86,9 +75,6 @@ class Botao {
 
         ///FUNDO DOS BOTOES
         strokeWeight(2);
-        /*switch (this.estado) {
-            case HOVER:
-            case CLICKED:*/
         corFillHover = color('#ed145b');
         corStrokeHover = color('#ed145b');
         corFillNoHover = color('#fff');
@@ -99,38 +85,18 @@ class Botao {
 
         fill(corFill);
         noStroke();
-        //stroke(corStroke);
-
-        /*//fill('#ed145b');
-        //stroke('#ed145b');
-        break;
-    case NO_HOVER:
-        //fill('#fff');
-        //stroke('#666');
-        break;
-}*/
 
         rect(this.x, this.y, this.largura, this.altura, 7);
 
         ///FUNCOES DOS BOTOES
         noFill();
         strokeWeight(2);
-        /*switch (this.estado) {
-            case HOVER:
-            case CLICKED:*/
         corStrokeHover = color('#fff');
         corStrokeNoHover = color('#ed145b');
 
         corStroke = lerpColor(corStrokeNoHover, corStrokeHover, this.hoverAnimacao);
 
         stroke(corStroke);
-
-        /*stroke('#fff');
-        break;
-    case NO_HOVER:
-        stroke('#ed145b');
-        break;
-}*/
 
         var centroX, centroY, raioX, raioY, diametroX, diametroY, largura, altura;
 
@@ -220,7 +186,7 @@ class Botao {
 
                 strokeWeight(1);
                 textSize(12);
-                text('PRINT', this.x + 8, this.y + 15);
+                text('GERAR', this.x + 4, this.y + 15);
                 break;
             case HISTORICO:
                 if (this.estado == NO_HOVER)
@@ -230,7 +196,7 @@ class Botao {
 
                 strokeWeight(1);
                 textSize(12);
-                text('HISTORY', this.x + 60, this.y + 23);
+                text('HISTÓRICO', this.x + 52, this.y + 23);
                 break;
         }
     }
@@ -266,21 +232,27 @@ function desenharHistorico() {
     var x = botoes[10].x - 1;
     var y = botoes[10].y - 1;
     var largura = botoes[10].largura + 1;
-    var altura = height - 55;
+
+    let value = y + 41;
+    var formasPorPagina = 0;
+    while (value < (height - 55) / 2) {
+        value += 60;
+        formasPorPagina += 2;
+    }
+    var altura = value - 60;
+    formasPorPagina -= 2;
 
     rect(x, y, largura, altura, 7);
-
-    if (mouseX < x || mouseX > x + largura ||
+    //
+    /*if (mouseX < x || mouseX > x + largura ||
         mouseY < y || mouseY > y + altura) {
         mostrarHistorico = false;
         historicoPagina = 1;
         this.hoverAnimacao = 0;
         $("#txtGcode").show();
-    }
-
+    }*/
+    //
     var hover = -1;
-
-    var formasPorPagina = ceil((altura - 90 - y) / 30);
 
     if (formas.length > 0) {
         for (var i = 0; i < formasPorPagina; i++) {
@@ -304,11 +276,10 @@ function desenharHistorico() {
             var indiceForma = i + (historicoPagina - 1) * formasPorPagina;
 
             if (miniaturaY + miniaturaAltura > altura || indiceForma >= formas.length) {
-                //formasPorPagina = i - 2;
                 break;
             }
-
-            formas[indiceForma].desenharMiniatura(miniaturaX, miniaturaY, tamanhoMiniatura);
+            
+                formas[indiceForma].desenharMiniatura(miniaturaX, miniaturaY, tamanhoMiniatura);
 
             var botaoExcluirLargura = 30;
             var botaoExcluirAltura = miniaturaAltura;
@@ -339,6 +310,9 @@ function desenharHistorico() {
 
                 if (mouseIsPressed && !jaFoiClicado) {
                     formas.splice(indiceForma, 1);
+                    if (historicoPagina > ceil(formas.length / formasPorPagina)) {
+                        historicoPagina = max(ceil(formas.length / formasPorPagina), 1);
+                    }
                     jaFoiClicado = true;
                 }
             }
@@ -385,7 +359,6 @@ function desenharHistorico() {
             if (mouseX > backArrowX && mouseX < backArrowX + backArrowLargura &&
                 mouseY > backArrowY && mouseY < backArrowY + backArrowAltura) {
                 bloqueiaClick = true;
-                console.log(`back`);
                 if (historicoPagina > 1) {
                     historicoPagina--;
                 }
@@ -393,22 +366,21 @@ function desenharHistorico() {
 
             if (mouseX > nextArrowX && mouseX < nextArrowX + nextArrowLargura &&
                 mouseY > nextArrowY && mouseY < nextArrowY + nextArrowAltura) {
-                    bloqueiaClick = true;
-                console.log(`next`);
+                bloqueiaClick = true;
 
-                if (historicoPagina < ceil(formas.length/formasPorPagina)) {
+                if (historicoPagina < ceil(formas.length / formasPorPagina)) {
                     historicoPagina++;
                 }
             }
 
         }
 
-        if (!mouseIsPressed){
+        if (!mouseIsPressed) {
             bloqueiaClick = false;
         }
 
 
-strokeWeight(2);
+        strokeWeight(2);
         stroke('#ed145b');
         noFill();
 
@@ -416,8 +388,6 @@ strokeWeight(2);
             line(x + 30, y + 10, x + 20, y + 20);
             line(x + 20, y + 20, x + 30, y + 30);
         }
-
-        //console.log()
 
         if (historicoPagina < ceil(formas.length / formasPorPagina)) {
             line(x + largura - 30, y + 10, x + largura - 20, y + 20);
@@ -427,13 +397,45 @@ strokeWeight(2);
         fill('#ed145b');
         strokeWeight(1);
         textSize(12);
-        text('HISTORY', width - 115, 24);
+        text('HISTÓRICO', width - 123, 24);
     }
     else {
         fill('#ed145b');
         stroke('#ed145b');
         strokeWeight(1);
+        textSize(12);
+        text('HISTÓRICO', width - 123, 24);
         textSize(16);
-        text("NO SHAPE FOUND", x + 16, y + 30);
+        
+        text("VAZIO", x + 60, y + 55);
     }
 }
+
+function abrirModalConfiguracoes() {
+    $('.meu-modal-container').addClass('is-active');
+}
+
+$(document).on('click', '.fechar', function () {
+    $('.meu-modal-container').removeClass('is-active');
+});
+
+$(document).on('click', '.btn-gerar-gcode', function () {
+    clicks = [];
+    tempPontos = [];
+
+    let escala = $('.input-scala').val();
+    let velocidadeRobo = $('.input-speed').val();
+    //let segmentosElipse = $('.input-ellipse').val();
+
+    gerarGcode(escala, velocidadeRobo/*, segmentosElipse*/);
+
+    $('.meu-modal-container').removeClass('is-active');
+});
+
+
+$(document).on('click', '.meu-modal-container', function (e) {
+    console.log(e.target.id);
+    if (e.target.id == 'meu-modal-container') {
+    $('.meu-modal-container').removeClass('is-active');
+    }
+});

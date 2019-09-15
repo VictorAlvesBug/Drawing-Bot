@@ -1,12 +1,14 @@
 
 var enviandoDados = false;
 
-function gerarGcode() {
-    var strGcode = "G1 F50 \n";
+function gerarGcode(escala, velocidadeRobo/*, segmentosElipse*/) {
+    var strGcode = `G0 \n`;
+    var strGcode = `G1 F${velocidadeRobo} \n`;
     for (var i = 0; i < formas.length; i++) {
         var arrayPontos = formas[i].getPontos();
-        let x = int(arrayPontos[0].x) - areaDesenhavelX;
-        let y = int(arrayPontos[0].y) - areaDesenhavelY;
+        let x = ceil(map(arrayPontos[0].x - areaDesenhavelX, 0, areaDesenhavelWidth, 0, escala));
+        let y = ceil(map(arrayPontos[0].y - areaDesenhavelY, 0, areaDesenhavelHeight, 0, escala));
+        
         strGcode += 'G1 Z1 \n';
         strGcode += `G1 X${x} Y${y} \n`;
         strGcode += 'G1 Z0 \n';
@@ -18,6 +20,8 @@ function gerarGcode() {
                 strGcode += 'G1 Z1 \n';
             }
             else {
+                x = ceil(map(x, 0, areaDesenhavelWidth, 0, escala));
+                y = ceil(map(y, 0, areaDesenhavelHeight, 0, escala));
                 strGcode += `G1 X${x} Y${y} \n`;
                 if (arrayPontos[j - 1].x == 0 && arrayPontos[j - 1].y == 0) {
                     strGcode += 'G1 Z0 \n';
@@ -26,7 +30,7 @@ function gerarGcode() {
         }
     }
     strGcode += 'G1 Z1 \n';
-    strGcode += 'GF \n';
+    strGcode += 'G99 \n';
 
     var txtGcode = $('#txtGcode');
 

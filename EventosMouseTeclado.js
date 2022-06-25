@@ -1,67 +1,80 @@
 function mouseClicked() {
-    if (myMouseX > areaDesenhavelX && myMouseX < areaDesenhavelX + areaDesenhavelWidth && myMouseY > areaDesenhavelY && myMouseY < areaDesenhavelY + areaDesenhavelHeight) {
-        switch (modo) {
-            case POINT:
-                clicks = [];
-                clicks.push(createVector(myMouseX, myMouseY));
-                formas.push(new Forma(modo, clicks));
-                clicks = [];
-                tempForma = undefined;
-                break;
-            case LINE:
-            case RECT:
-            case ELLIPSE:
-            case STAR:
-            case FIAP:
-                if (clicks.length == 0) {
-                    clicks.push(createVector(myMouseX, myMouseY));
-                }
-                else {
+    if (myMouseX > areaDesenhavelX &&
+        myMouseX < areaDesenhavelX + areaDesenhavelWidth &&
+        myMouseY > areaDesenhavelY &&
+        myMouseY < areaDesenhavelY + areaDesenhavelHeight) {
+
+        if ($('.meu-modal-container').hasClass('is-active')) {
+
+            $(document).on('click', '.fechar', function () {
+                $('.meu-modal-container').removeClass('is-active');
+            });
+
+        }
+        else {
+            switch (modo) {
+                case POINT:
+                    clicks = [];
                     clicks.push(createVector(myMouseX, myMouseY));
                     formas.push(new Forma(modo, clicks));
                     clicks = [];
                     tempForma = undefined;
-                }
-                break;
-            case TRIANGLE:
-                if (clicks.length <= 1) {
-                    clicks.push(createVector(myMouseX, myMouseY));
-                }
-                else {
-                    clicks.push(createVector(myMouseX, myMouseY));
-                    formas.push(new Forma(modo, clicks));
-                    clicks = [];
-                    tempForma = undefined;
-                }
-                break;
-            case FREE_DRAWING:
-                if (clicks.length == 0) {
-                    clicks.push(createVector(myMouseX, myMouseY));
-                }
-                else {
-                    formas.push(new Forma(modo, tempPontos));
+                    break;
+                case LINE:
+                case RECT:
+                case ELLIPSE:
+                case STAR:
+                case FIAP:
+                    if (clicks.length == 0) {
+                        clicks.push(createVector(myMouseX, myMouseY));
+                    }
+                    else {
+                        clicks.push(createVector(myMouseX, myMouseY));
+                        formas.push(new Forma(modo, clicks));
+                        clicks = [];
+                        tempForma = undefined;
+                    }
+                    break;
+                case TRIANGLE:
+                    if (clicks.length <= 1) {
+                        clicks.push(createVector(myMouseX, myMouseY));
+                    }
+                    else {
+                        clicks.push(createVector(myMouseX, myMouseY));
+                        formas.push(new Forma(modo, clicks));
+                        clicks = [];
+                        tempForma = undefined;
+                    }
+                    break;
+                case FREE_DRAWING:
+                    if (clicks.length == 0) {
+                        clicks.push(createVector(myMouseX, myMouseY));
+                    }
+                    else {
+                        formas.push(new Forma(modo, tempPontos));
+                        tempPontos = [];
+                        clicks = [];
+                        tempForma = undefined;
+                    }
+                    break;
+                case ABC:
+                    if (tempForma != undefined && tempForma.texto.length > 0) {
+                        formas.push(tempForma);
+                    }
+
+                    tempPontos = [];
+                    tempPontos.push(createVector(myMouseX, myMouseY));
+                    tempForma = new Forma(modo, tempPontos);
                     tempPontos = [];
                     clicks = [];
-                    tempForma = undefined;
-                }
-                break;
-            case ABC:
-                if (tempForma != undefined && tempForma.texto.length > 0) {
-                    formas.push(tempForma);
-                }
-
-                tempPontos = [];
-                tempPontos.push(createVector(myMouseX, myMouseY));
-                tempForma = new Forma(modo, tempPontos);
-                tempPontos = [];
-                clicks = [];
-                break;
+                    break;
+            }
         }
     }
     else {
         for (var i = 0; i < botoes.length; i++) {
-            if (myMouseX > botoes[i].x && myMouseX < botoes[i].x + 50 &&
-                myMouseY > botoes[i].y && myMouseY < botoes[i].y + 50) {
+            if (myMouseX > botoes[i].x && myMouseX < botoes[i].x + botoes[i].largura &&
+                myMouseY > botoes[i].y && myMouseY < botoes[i].y + botoes[i].altura) {
                 if (modo == ABC && tempForma != undefined && tempForma.texto.length > 0) {
                     formas.push(tempForma);
                 }

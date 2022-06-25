@@ -1,12 +1,14 @@
 
 var enviandoDados = false;
 
-function gerarGcode() {
-    var strGcode = "G1 F50 \n";
+function gerarGcode(escala, velocidadeRobo/*, segmentosElipse*/) {
+    var strGcode = `G0 \n`;
+    strGcode += `G1 F${velocidadeRobo} \n`;
     for (var i = 0; i < formas.length; i++) {
         var arrayPontos = formas[i].getPontos();
-        let x = int(arrayPontos[0].x) - areaDesenhavelX;
-        let y = int(arrayPontos[0].y) - areaDesenhavelY;
+        let x = ceil(map(arrayPontos[0].x - areaDesenhavelX, 0, areaDesenhavelWidth, 0, escala));
+        let y = ceil(map(arrayPontos[0].y - areaDesenhavelY, 0, areaDesenhavelHeight, 0, escala));
+        
         strGcode += 'G1 Z1 \n';
         strGcode += `G1 X${x} Y${y} \n`;
         strGcode += 'G1 Z0 \n';
@@ -14,10 +16,12 @@ function gerarGcode() {
             x = int(arrayPontos[j].x) - areaDesenhavelX;
             y = int(arrayPontos[j].y) - areaDesenhavelY;
 
-            if (x == 0 && y == 0) {
+            if (x == -areaDesenhavelX && y == -areaDesenhavelY) {
                 strGcode += 'G1 Z1 \n';
             }
             else {
+                x = ceil(map(x, 0, areaDesenhavelWidth, 0, escala));
+                y = ceil(map(y, 0, areaDesenhavelHeight, 0, escala));
                 strGcode += `G1 X${x} Y${y} \n`;
                 if (arrayPontos[j - 1].x == 0 && arrayPontos[j - 1].y == 0) {
                     strGcode += 'G1 Z0 \n';
@@ -26,7 +30,7 @@ function gerarGcode() {
         }
     }
     strGcode += 'G1 Z1 \n';
-    strGcode += 'GF \n';
+    strGcode += 'G99 \n';
 
     var txtGcode = $('#txtGcode');
 
@@ -49,52 +53,6 @@ function enviarDados() {
         enviarLinha(linha);
     }
 }
-
-//////////////////////////////////////////////////////////////////////
-
-//var SerialPort = require("serialport").SerialPort
-//var serialPort = new SerialPort('COM1',
-//    {
-//        baudrate: 57600
-//    });
-
-//serialPort.on("open", function () {
-
-//    console.log('open');
-
-
-//    if (enviandoDados) {
-
-//        var listaComandos = txtGcode.val().split('\n');
-
-//        for (let i = 0; i < listaComandos.length; i++) {
-//            let linha = listaComandos[i];
-
-//            setTimeout(function () {
-//                serialPort.write(linha + "V" + linha.length, function (err, results) {
-//                    console.log('err ' + err);
-//                    console.log('results ' + results);
-//                });
-
-//                setTimeout(function () {
-//                    serialPort.write("...from Node.js", function (err, results) {
-//                        console.log('err ' + err);
-//                        console.log('results ' + results);
-//                    });
-//                }, 1000);
-
-//            }, 3000);
-
-//        }
-
-
-//    }
-
-//});
-
-//////////////////////////////////////////////////////////////////////
-
-
 
 function enviarLinha(linha) {
 

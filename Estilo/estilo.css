@@ -1,0 +1,111 @@
+﻿.meu-modal-container {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100vw;
+    height: 100vh;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999999999;
+}
+
+    .meu-modal-container.is-active {
+        display: flex;
+    }
+
+.meu-modal {
+    width: 500px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 10px 2px rgba(0,0,0,0.7);
+}
+
+.meu-modal-container.is-active .meu-modal {
+    animation: fade-in-and-move-down .3s;
+}
+
+.meu-modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #aaa;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 80%;
+}
+
+.meu-modal-body {
+    padding: 10px 20px;
+}
+
+.meu-modal-footer {
+    padding: 20px;
+    border-top: 1px solid #aaa;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: 80%;
+}
+
+.meu-modal-titulo {
+    font: bolder 20px arial, verdana;
+}
+
+.fechar {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    font-weight: bolder;
+    cursor: pointer;
+}
+
+    .fechar > span {
+        transform: rotate(45deg);
+    }
+
+.configuracao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 80%;
+    margin: 10px;
+    font: normal 14px arial, verdana;
+}
+
+.input {
+    width: 40%;
+    padding: 5px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+}
+
+.btn-gerar-gcode {
+    border: 2px solid #ed145b;
+    background-color: #fff;
+    color: #000;
+    font: normal 14px arial, verdana;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: 0.5s;
+}
+
+    .btn-gerar-gcode:hover {
+        background-color: #ed145b;
+        color: #fff;
+    }
+
+@keyframes fade-in-and-move-down {
+    from {
+        transform: translate3d(0, -40px, 0);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+        opacity: 1;
+    }
+}

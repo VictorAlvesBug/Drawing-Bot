@@ -11,16 +11,45 @@
     <!--<script language="javascript" type="text/javascript" src="libraries/p5.js"></script>
     <script language="javascript" type="text/javascript" src="p5.serialport.js"></script>-->
 
-    <script src="../../p5.min.js"></script>
-    <script src="../../addons/p5.dom.min.js"></script>
-    <script src="../../addons/p5.sound.min.js"></script>
-    <script src="jquery-3.3.1.min.js"></script>
+    <script src="libraries/p5.min.js"></script>
+    <script src="libraries/p5.dom.min.js"></script>
+    <script src="libraries/p5.sound.min.js"></script>
+    <script src="libraries/jquery-3.3.1.min.js"></script>
     <script src="sketch.js"></script>
     <script src="Forma.js"></script>
     <script src="Botao.js"></script>
     <script src="EventosMouseTeclado.js"></script>
     <script src="Gcode.js"></script>
+
+    <link rel="stylesheet" href="Estilo/estilo.css" />
 </head>
 <body>
+    <div id="meu-modal-container" class="meu-modal-container">
+        <div class="meu-modal">
+            <div class="meu-modal-header">
+                <div class="meu-modal-titulo">
+                    Configurações do Gcode
+                </div>
+                <div class="fechar"><span>+</span></div>
+            </div>
+            <div class="meu-modal-body">
+                <div class="configuracao config-scala">
+                    <label class="label label-scala">Escala do desenho (mm):</label>
+                    <input class="input input-scala" type="number" value="1000" />
+                </div>
+                <div class="configuracao config-speed">
+                    <label class="label label-speed">Velocidade do robô:</label>
+                    <input class="input input-speed" type="number" value="50" />
+                </div>
+                <!--<div class="configuracao config-ellipse">
+                    <label class="label label-ellipse">N° de segmentos das elipses:</label>
+                    <input class="input input-ellipse" type="number" value="64" />
+                </div>-->
+            </div>
+            <div class="meu-modal-footer">
+                <button type="button" class="btn-gerar-gcode">Gerar Gcode</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
